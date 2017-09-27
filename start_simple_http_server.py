@@ -16,4 +16,11 @@ def server_start(port):
 
 	serverPid=server_process.pid
   
-  return serverPid
+  	return serverPid
+
+def server_kill():
+	try:
+		# print('Trying to stop server process %s' % str(serverPid))
+		os.kill(int(serverPid),9)
+	except Exception as e:
+		print(e)
