@@ -1,13 +1,19 @@
-import http.server
-import socketserver
-import os
+def server_start(port):
+	'''Starts Python's SimpleHTTPServer on specified port'''
+	httpPort = int(port)
+	Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
+	httpd = SocketServer.TCPServer(("",httpPort), Handler, bind_and_activate=False)
+	httpd.allow_reuse_address = True
+	server_process = multiprocessing.Process(target=httpd.serve_forever)
+	server_process.daemon = False
+	try:
+		httpd.server_bind()
+		httpd.server_activate()
+	except:
+		httpd.server_close()
+	# Create process
+	server_process.start()
 
-PORT = 8000
-
-web_dir = os.path.join(os.path.dirname(__file__), 'web')
-os.chdir(web_dir)
-
-Handler = http.server.SimpleHTTPRequestHandler
-httpd = socketserver.TCPServer(("", PORT), Handler)
-print("serving at port", PORT)
-httpd.serve_forever()
+	serverPid=server_process.pid
+  
+  return serverPid
